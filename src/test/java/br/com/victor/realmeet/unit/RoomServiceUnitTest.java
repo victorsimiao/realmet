@@ -9,6 +9,7 @@ import br.com.victor.realmeet.service.RoomService;
 import br.com.victor.realmeet.utils.MapperUtils;
 import br.com.victor.realmeet.utils.TestConstants;
 import br.com.victor.realmeet.utils.TestDataCreator;
+import br.com.victor.realmeet.validator.RoomValidator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,9 +28,12 @@ public class RoomServiceUnitTest extends BaseUnitTest {
     @Mock
     private RoomRepository roomRepository;
 
+    @Mock
+    private RoomValidator roomValidator;
+
     @BeforeEach
     public void setupEach() {
-        roomService = new RoomService(roomRepository, MapperUtils.newRoomMapper());
+        roomService = new RoomService(roomRepository, MapperUtils.newRoomMapper(), roomValidator);
     }
 
     @Test

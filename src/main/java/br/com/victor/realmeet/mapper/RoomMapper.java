@@ -1,6 +1,7 @@
 package br.com.victor.realmeet.mapper;
 
 import br.com.victor.realmeet.domain.entity.Room;
+import br.com.victor.realmeet.dto.request.RoomRequest;
 import br.com.victor.realmeet.dto.response.RoomResponse;
 import org.mapstruct.Mapper;
 
@@ -8,4 +9,5 @@ import org.mapstruct.Mapper;
 public interface RoomMapper {
 
     RoomResponse fromEntityForDto(Room room);
+    Room fromDtoForEntity(RoomRequest roomRequest);
 }
