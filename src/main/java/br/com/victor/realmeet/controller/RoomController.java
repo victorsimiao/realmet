@@ -28,4 +28,10 @@ public class RoomController {
     public ResponseEntity<RoomResponse> createRoom(@Valid @RequestBody RoomRequest roomRequest) {
         return ResponseEntity.status(HttpStatus.CREATED).body(roomService.createRoom(roomRequest));
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteRoom(@PathVariable(value = "id") Long id) {
+        roomService.deleteRoom(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }

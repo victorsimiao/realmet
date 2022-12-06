@@ -3,18 +3,16 @@ package br.com.victor.realmeet.unit;
 import br.com.victor.realmeet.core.BaseUnitTest;
 import br.com.victor.realmeet.dto.request.RoomRequest;
 import br.com.victor.realmeet.exception.InvalidRequestException;
-import br.com.victor.realmeet.utils.TestConstants;
 import br.com.victor.realmeet.utils.TestDataCreator;
 import br.com.victor.realmeet.validator.RoomValidator;
 import br.com.victor.realmeet.validator.ValidationError;
-import br.com.victor.realmeet.validator.ValidatorConstants;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static br.com.victor.realmeet.validator.ValidatorConstants.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class RoomValidatorUnitTest extends BaseUnitTest {
 

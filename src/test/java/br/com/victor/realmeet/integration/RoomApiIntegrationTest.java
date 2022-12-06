@@ -5,14 +5,12 @@ import br.com.victor.realmeet.domain.entity.Room;
 import br.com.victor.realmeet.domain.repository.RoomRepository;
 import br.com.victor.realmeet.utils.TestDataCreator;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.web.client.HttpClientErrorException;
 
 import static br.com.victor.realmeet.utils.TestDataCreator.newRoomBuilder;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -66,6 +64,32 @@ public class RoomApiIntegrationTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$.code").value("404"))
                 .andExpect(jsonPath("$.status").value("Not Found"))
                 .andExpect(jsonPath("$.message").value("Room not found: "+room.getId()));
+
+    }
+
+    @Test
+    void testDeleteRoomSuccess() throws Exception {
+        Room room = TestDataCreator.newRoomBuilder().build();
+        Long roomId = roomRepository.saveAndFlush(room).getId();
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.delete ("/rooms/" + room.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Accept-Language", "pt-br");
+
+        mockMvc.perform(request)
+                .andExpect(status().isNoContent());
+
+        assertThat(roomRepository.findById(roomId).orElseThrow().getActive()).isEqualTo(false);
+    }
+
+    @Test
+    void testDeleteRoomDoesNotExist() throws Exception{
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.delete ("/rooms/" + 1)
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Accept-Language", "pt-br");
+
+        mockMvc.perform(request)
+                .andExpect(status().isNotFound());
 
     }
 }
