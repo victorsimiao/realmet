@@ -1,6 +1,7 @@
 package br.com.victor.realmeet.controller;
 
 import br.com.victor.realmeet.dto.request.RoomRequest;
+import br.com.victor.realmeet.dto.request.UpdateRoomRequest;
 import br.com.victor.realmeet.dto.response.RoomResponse;
 import br.com.victor.realmeet.service.RoomService;
 import org.springframework.http.HttpStatus;
@@ -32,6 +33,12 @@ public class RoomController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteRoom(@PathVariable(value = "id") Long id) {
         roomService.deleteRoom(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> updateRoom(@PathVariable(value = "id") Long id, @Valid @RequestBody UpdateRoomRequest updateRoomRequest) {
+        roomService.updateRoom(id, updateRoomRequest);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

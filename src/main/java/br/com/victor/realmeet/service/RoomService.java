@@ -3,6 +3,7 @@ package br.com.victor.realmeet.service;
 import br.com.victor.realmeet.domain.entity.Room;
 import br.com.victor.realmeet.domain.repository.RoomRepository;
 import br.com.victor.realmeet.dto.request.RoomRequest;
+import br.com.victor.realmeet.dto.request.UpdateRoomRequest;
 import br.com.victor.realmeet.dto.response.RoomResponse;
 import br.com.victor.realmeet.exception.RoomNotFoundException;
 import br.com.victor.realmeet.mapper.RoomMapper;
@@ -41,6 +42,13 @@ public class RoomService {
     public void deleteRoom(Long id) {
         getActiveRoomOrThrow(id);
         roomRepository.deactivate(id);
+    }
+
+    @Transactional
+    public void updateRoom(Long id, UpdateRoomRequest updateRoomRequest) {
+        roomValidator.validate(updateRoomRequest);
+        getActiveRoomOrThrow(id);
+        roomRepository.updateRoom(id, updateRoomRequest.getName(), updateRoomRequest.getSeats());
     }
 
     private Room getActiveRoomOrThrow(Long id) {

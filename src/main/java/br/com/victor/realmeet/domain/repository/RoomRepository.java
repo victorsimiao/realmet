@@ -4,6 +4,7 @@ import br.com.victor.realmeet.domain.entity.Room;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -15,4 +16,7 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
     @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query("UPDATE Room r SET r.active = false WHERE r.id = :roomId")
     void deactivate(Long roomId);
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    @Query("UPDATE Room r SET r.name = :name, r.seats = :seats WHERE r.id = :roomId")
+    void updateRoom(@Param("roomId") Long roomId, @Param("name") String name, @Param("seats") Integer seats);
 }
