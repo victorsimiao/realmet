@@ -8,10 +8,8 @@ import br.com.victor.realmeet.utils.MapperUtils;
 import br.com.victor.realmeet.utils.TestDataCreator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 class RoomMapperUnitTest extends BaseUnitTest {
@@ -27,7 +25,7 @@ class RoomMapperUnitTest extends BaseUnitTest {
     void testFromEntityToDto() {
         Room room = TestDataCreator.newRoomBuilder().build();
 
-        RoomResponse roomResponse = roomMapper.fromEntityForDto(room);
+        RoomResponse roomResponse = roomMapper.fromEntityToDto(room);
 
         assertEquals(room.getName(),roomResponse.getName());
         assertEquals(room.getSeats(),roomResponse.getSeats());

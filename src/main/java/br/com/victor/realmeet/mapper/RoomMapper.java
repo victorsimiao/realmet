@@ -8,6 +8,6 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface RoomMapper {
 
-    RoomResponse fromEntityForDto(Room room);
+    RoomResponse fromEntityToDto(Room room);
     Room fromDtoForEntity(RoomRequest roomRequest);
 }

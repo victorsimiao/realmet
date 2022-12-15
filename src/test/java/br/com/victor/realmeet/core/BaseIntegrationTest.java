@@ -10,7 +10,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 @ActiveProfiles(profiles = "integration-test")
 @AutoConfigureMockMvc
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = RealmeetApplication.class)
+@SpringBootTest(classes = RealmeetApplication.class)
 public abstract class BaseIntegrationTest {
 
     @Autowired

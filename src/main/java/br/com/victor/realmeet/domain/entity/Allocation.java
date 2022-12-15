@@ -1,6 +1,7 @@
 package br.com.victor.realmeet.domain.entity;
 
 import br.com.victor.realmeet.domain.model.Employee;
+import br.com.victor.realmeet.util.DateUtils;
 
 import javax.persistence.*;
 import java.time.OffsetDateTime;
@@ -31,7 +32,8 @@ public class Allocation {
     private OffsetDateTime updatedAt;
 
     @Deprecated
-    public Allocation() {}
+    public Allocation() {
+    }
 
     private Allocation(Builder builder) {
         this.id = builder.id;
@@ -42,6 +44,19 @@ public class Allocation {
         this.endAt = builder.endAt;
         this.createdAt = builder.createdAt;
         this.updatedAt = builder.updatedAt;
+    }
+
+    @PrePersist
+    public void prePersist() {
+        if (Objects.isNull(createdAt)) {
+            createdAt = DateUtils.now();
+        }
+        updatedAt = createdAt;
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        updatedAt = DateUtils.now();
     }
 
     public Long getId() {

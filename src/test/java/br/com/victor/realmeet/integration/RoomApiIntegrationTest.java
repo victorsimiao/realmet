@@ -40,8 +40,10 @@ public class RoomApiIntegrationTest extends BaseIntegrationTest {
         mockMvc.perform(request)
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.name").value("Room Test"))
+                .andExpect(jsonPath("$.name").value(room.getName()))
+                .andExpect(jsonPath("$.seats").value(room.getSeats()))
                 .andExpect(jsonPath("$.active").value(true));
+
 
         assertThat(roomRepository.findById(room.getId())).isPresent();
         assertThat(roomRepository.findAll()).size().isEqualTo(1);
