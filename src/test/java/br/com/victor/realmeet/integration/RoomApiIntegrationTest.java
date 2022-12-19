@@ -20,11 +20,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class RoomApiIntegrationTest extends BaseIntegrationTest {
 
     @Autowired
-    private MockMvc mockMvc;
-
-    private ObjectMapper mapper;
-
-    @Autowired
     private RoomRepository roomRepository;
 
     @Test

@@ -20,15 +20,15 @@ public class Allocation {
 
     @Embedded
     private Employee employee;
-
+    @Column(name = "subject")
     private String subject;
-
+    @Column(name = "start_at")
     private OffsetDateTime startAt;
-
+    @Column(name = "end_at")
     private OffsetDateTime endAt;
-
+    @Column(name = "created_at")
     private OffsetDateTime createdAt;
-
+    @Column(name = "updated_at")
     private OffsetDateTime updatedAt;
 
     @Deprecated

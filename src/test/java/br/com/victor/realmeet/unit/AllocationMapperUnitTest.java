@@ -7,12 +7,12 @@ import br.com.victor.realmeet.dto.request.AllocationRequest;
 import br.com.victor.realmeet.dto.response.AllocationResponse;
 import br.com.victor.realmeet.mapper.AllocationMapper;
 import br.com.victor.realmeet.utils.MapperUtils;
+import br.com.victor.realmeet.utils.TestConstants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static br.com.victor.realmeet.utils.TestDataCreator.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class AllocationMapperUnitTest extends BaseUnitTest {
 
@@ -42,15 +42,16 @@ public class AllocationMapperUnitTest extends BaseUnitTest {
 
     @Test
     void testFromAllocationToDto(){
-        Room room = newRoomBuilder().build();
+        Room room = newRoomBuilder().id(TestConstants.DEFAULT_ROOM_ID).build();
         Allocation allocation = newAllocationBuilder(room).build();
 
         AllocationResponse allocationResponse = allocationMapper.fromEntityToDto(allocation);
 
-        assertEquals(allocationResponse.getEmployeeName(), allocation.getEmployee().getName());
-        assertEquals(allocationResponse.getEmployeeEmail(), allocation.getEmployee().getEmail());
-        assertEquals(allocationResponse.getSubject(), allocation.getSubject());
-        assertEquals(allocationResponse.getStartAt(), allocation.getStartAt());
-        assertEquals(allocationResponse.getEndAt() , allocation.getEndAt());
+        assertNotNull(allocationResponse.getRoomId());
+        assertEquals(allocation.getEmployee().getName(), allocationResponse.getEmployeeName());
+        assertEquals(allocation.getEmployee().getEmail(), allocationResponse.getEmployeeEmail());
+        assertEquals(allocation.getSubject(), allocationResponse.getSubject());
+        assertEquals(allocation.getStartAt(), allocationResponse.getStartAt());
+        assertEquals(allocation.getEndAt(), allocationResponse.getEndAt());
     }
 }

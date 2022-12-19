@@ -1,12 +1,13 @@
 package br.com.victor.realmeet.domain.model;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
 public class Employee {
-
+    @Column(name = "employee_name")
     private String name;
-
+    @Column(name = "employee_email")
     private String email;
 
     public Employee() {}

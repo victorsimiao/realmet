@@ -4,7 +4,6 @@ import br.com.victor.realmeet.util.DateUtils;
 
 import java.time.OffsetDateTime;
 
-import static java.time.OffsetDateTime.now;
 
 public final class TestConstants {
     public static final long DEFAULT_ROOM_ID = 1L;
