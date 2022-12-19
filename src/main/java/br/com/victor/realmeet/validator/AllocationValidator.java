@@ -43,7 +43,7 @@ public class AllocationValidator {
     }
 
 // Validações de datas
-    public void validateDates(OffsetDateTime startAt, OffsetDateTime endAt, ValidationErros validationErrors) {
+    private void validateDates(OffsetDateTime startAt, OffsetDateTime endAt, ValidationErros validationErrors) {
         if (validateDateIsPresent(startAt, endAt, validationErrors)) {
             validateDateOrdering(startAt, endAt, validationErrors);
             validateDateInTheFuture(startAt,validationErrors);
@@ -71,7 +71,7 @@ public class AllocationValidator {
         }
     }
 
-    public void validateDuration(OffsetDateTime startAt, OffsetDateTime endAt, ValidationErros validationErrors){
+    private void validateDuration(OffsetDateTime startAt, OffsetDateTime endAt, ValidationErros validationErrors){
         if (Duration.between(startAt,endAt).getSeconds()> ALLOCATION_MAX_DURATION_SECONDS){
             validationErrors.add(ALLOCATION_END_AT,ALLOCATION_END_AT+EXCEEDS_DURATION);
         }
