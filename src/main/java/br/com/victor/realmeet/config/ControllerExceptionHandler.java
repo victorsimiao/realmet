@@ -1,5 +1,6 @@
 package br.com.victor.realmeet.config;
 
+import br.com.victor.realmeet.exception.AllocationNotFoundException;
 import br.com.victor.realmeet.exception.InvalidRequestException;
 import br.com.victor.realmeet.exception.RoomNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -15,7 +16,7 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class ControllerExceptionHandler {
 
-    @ExceptionHandler(RoomNotFoundException.class)
+    @ExceptionHandler({RoomNotFoundException.class, AllocationNotFoundException.class})
     public ResponseEntity<Object> handlerNotFoundException(Exception exception) {
         return buildResponseEntityErro(HttpStatus.NOT_FOUND, exception);
     }
