@@ -53,7 +53,7 @@ public class AllocationValidator {
 
     private boolean validateDateIsPresent(OffsetDateTime startAt, OffsetDateTime endAt, ValidationErros validationErrors) {
         return (
-                validateRequired(startAt, ALLOCATION_START_AT, validationErrors) && validateRequired(startAt, ALLOCATION_END_AT, validationErrors)
+                validateRequired(startAt, ALLOCATION_START_AT, validationErrors) && validateRequired(endAt, ALLOCATION_END_AT, validationErrors)
         );
     }
 
