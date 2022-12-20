@@ -77,4 +77,28 @@ public class AllocationValidatorUnitTest extends BaseUnitTest {
                 invalidRequestException.getValidationErrors().getErro(0)
         );
     }
+
+
+    @Test
+    void testValidateWhenEmailIsMissing(){
+        AllocationRequest allocationRequest = newAllocationRequestBuilder().employeeEmail(null).build();
+
+        InvalidRequestException invalidRequestException = assertThrows(InvalidRequestException.class, () -> allocationValidator.validate(allocationRequest));
+
+        assertEquals(1, invalidRequestException.getValidationErrors().getNumberOfErros());
+        assertEquals(new ValidationError(ALLOCATION_EMPLOYEE_EMAIL, ALLOCATION_EMPLOYEE_EMAIL+MISSING), invalidRequestException.getValidationErrors().getErro(0));
+    }
+
+    @Test
+    void testValidateWhenEmailExceedsLength(){
+        AllocationRequest allocationRequest = newAllocationRequestBuilder().employeeEmail(StringUtils.rightPad("X", ALLOCATION_EMPLOYEE_EMAIL_MAX_LENGTH + 1, 'X')).build();
+
+        InvalidRequestException invalidRequestException = assertThrows(InvalidRequestException.class, () -> allocationValidator.validate(allocationRequest));
+
+        assertEquals(1, invalidRequestException.getValidationErrors().getNumberOfErros());
+        assertEquals(
+                new ValidationError(ALLOCATION_EMPLOYEE_EMAIL, ALLOCATION_EMPLOYEE_EMAIL + EXCEEDS_MAX_LENGTH),
+                invalidRequestException.getValidationErrors().getErro(0)
+        );
+    }
 }
