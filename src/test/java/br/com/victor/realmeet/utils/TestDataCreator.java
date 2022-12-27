@@ -5,6 +5,7 @@ import br.com.victor.realmeet.domain.entity.Room;
 import br.com.victor.realmeet.domain.model.Employee;
 import br.com.victor.realmeet.dto.request.AllocationRequest;
 import br.com.victor.realmeet.dto.request.RoomRequest;
+import br.com.victor.realmeet.dto.request.UpdateAllocationRequest;
 
 import static br.com.victor.realmeet.utils.TestConstants.*;
 
@@ -35,6 +36,13 @@ public final class TestDataCreator {
                 .id(DEFAULT_ALLOCATION_ID)
                 .room(room)
                 .employee(Employee.newEmployee().name(DEFAULT_EMPLOYEE_EMAIL).email(DEFAULT_EMPLOYEE_EMAIL).build())
+                .subject(DEFAULT_ALLOCATION_SUBJECT)
+                .startAt(DEFAULT_ALLOCATION_START_AT)
+                .endAt(DEFAULT_ALLOCATION_END_AT);
+    }
+
+    public static UpdateAllocationRequest.Builder newUpdateAllocationBuilder(){
+        return UpdateAllocationRequest.newBuilder()
                 .subject(DEFAULT_ALLOCATION_SUBJECT)
                 .startAt(DEFAULT_ALLOCATION_START_AT)
                 .endAt(DEFAULT_ALLOCATION_END_AT);

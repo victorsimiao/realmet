@@ -5,14 +5,18 @@ import br.com.victor.realmeet.domain.entity.Room;
 import br.com.victor.realmeet.domain.repository.AllocationRepository;
 import br.com.victor.realmeet.domain.repository.RoomRepository;
 import br.com.victor.realmeet.dto.request.AllocationRequest;
+import br.com.victor.realmeet.dto.request.UpdateAllocationRequest;
 import br.com.victor.realmeet.dto.response.AllocationResponse;
 import br.com.victor.realmeet.exception.AllocationCannotBeDeletedException;
+import br.com.victor.realmeet.exception.AllocationCannotBeUpdateException;
 import br.com.victor.realmeet.exception.AllocationNotFoundException;
 import br.com.victor.realmeet.exception.RoomNotFoundException;
 import br.com.victor.realmeet.mapper.AllocationMapper;
-import br.com.victor.realmeet.util.DateUtils;
 import br.com.victor.realmeet.validator.AllocationValidator;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import static br.com.victor.realmeet.util.DateUtils.now;
 
 @Service
 public class AllocationService {
@@ -38,13 +42,38 @@ public class AllocationService {
         return allocationMapper.fromEntityToDto(allocation);
     }
 
-    public void deleteAllocation(Long id){
-        Allocation allocation = allocationRepository.findById(id).orElseThrow(() -> new AllocationNotFoundException("Allocation not found: " + id));
+    public void deleteAllocation(Long id) {
+        Allocation allocation = getAllocationOrThrow(id);
 
-        if (allocation.getEndAt().isBefore(DateUtils.now())){
+        if (isAllocationInThePast(allocation)) {
             throw new AllocationCannotBeDeletedException();
         }
         allocationRepository.delete(allocation);
 
+    }
+
+    @Transactional
+    public void updateallocation(Long id, UpdateAllocationRequest updateAllocationRequest) {
+        Allocation allocation = getAllocationOrThrow(id);
+
+        if (isAllocationInThePast(allocation)) {
+            throw new AllocationCannotBeUpdateException();
+        }
+
+        allocationValidator.validate(id,updateAllocationRequest);
+
+        allocationRepository.updateAllocation(
+                id,
+                updateAllocationRequest.getSubject(),
+                updateAllocationRequest.getStartAt(),
+                updateAllocationRequest.getEndAt()
+        );
+    }
+
+    private boolean isAllocationInThePast(Allocation allocation) {
+        return allocation.getStartAt().isBefore(now());
+    }
+    private Allocation getAllocationOrThrow(Long id) {
+        return allocationRepository.findById(id).orElseThrow(() -> new AllocationNotFoundException("Allocation not found: " + id));
     }
 }

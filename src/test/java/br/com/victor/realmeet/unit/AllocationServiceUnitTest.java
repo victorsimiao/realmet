@@ -5,30 +5,23 @@ import br.com.victor.realmeet.domain.entity.Allocation;
 import br.com.victor.realmeet.domain.entity.Room;
 import br.com.victor.realmeet.domain.repository.AllocationRepository;
 import br.com.victor.realmeet.domain.repository.RoomRepository;
-import br.com.victor.realmeet.dto.request.RoomRequest;
-import br.com.victor.realmeet.dto.response.RoomResponse;
+import br.com.victor.realmeet.dto.request.UpdateAllocationRequest;
 import br.com.victor.realmeet.exception.AllocationCannotBeDeletedException;
-import br.com.victor.realmeet.exception.RoomNotFoundException;
+import br.com.victor.realmeet.exception.AllocationCannotBeUpdateException;
 import br.com.victor.realmeet.service.AllocationService;
-import br.com.victor.realmeet.service.RoomService;
 import br.com.victor.realmeet.util.DateUtils;
 import br.com.victor.realmeet.utils.MapperUtils;
-import br.com.victor.realmeet.utils.TestConstants;
 import br.com.victor.realmeet.utils.TestDataCreator;
 import br.com.victor.realmeet.validator.AllocationValidator;
-import br.com.victor.realmeet.validator.RoomValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class AllocationServiceUnitTest extends BaseUnitTest {
 
@@ -64,6 +57,30 @@ public class AllocationServiceUnitTest extends BaseUnitTest {
         Mockito.when(allocationRepository.findById(allocation.getId())).thenReturn(Optional.of(allocation));
 
         assertThrows(AllocationCannotBeDeletedException.class, () -> allocationService.deleteAllocation(allocation.getId()));
+    }
+
+    @Test
+    void updateAllocationWithSuccess(){
+        Room room = TestDataCreator.newRoomBuilder().build();
+        Allocation allocation = TestDataCreator.newAllocationBuilder(room).build();
+        UpdateAllocationRequest updateAllocationRequest = TestDataCreator.newUpdateAllocationBuilder().subject("New subject").build();
+        Mockito.when(allocationRepository.findById(allocation.getId())).thenReturn(Optional.of(allocation));
+
+        allocationService.updateallocation(allocation.getId(),updateAllocationRequest);
+
+        assertThat(allocation.getSubject()).isNotEqualToIgnoringCase(updateAllocationRequest.getSubject());
+        assertThat(allocation.getStartAt()).isEqualTo(updateAllocationRequest.getStartAt());
+        assertThat(allocation.getEndAt()).isEqualTo(updateAllocationRequest.getEndAt());
+    }
+
+    @Test
+    void shouldNotUpdateAllocationInThePast() {
+        Room room = TestDataCreator.newRoomBuilder().build();
+        Allocation allocation = TestDataCreator.newAllocationBuilder(room).startAt(DateUtils.now().minusMinutes(5)).build();
+        UpdateAllocationRequest updateAllocationRequest = TestDataCreator.newUpdateAllocationBuilder().build();
+        Mockito.when(allocationRepository.findById(allocation.getId())).thenReturn(Optional.of(allocation));
+
+        assertThrows(AllocationCannotBeUpdateException.class, () -> allocationService.updateallocation(allocation.getId(),updateAllocationRequest));
     }
 
 }

@@ -2,6 +2,7 @@ package br.com.victor.realmeet.validator;
 
 import br.com.victor.realmeet.dto.request.AllocationRequest;
 
+import br.com.victor.realmeet.dto.request.UpdateAllocationRequest;
 import br.com.victor.realmeet.util.DateUtils;
 import org.springframework.stereotype.Component;
 
@@ -26,6 +27,16 @@ public class AllocationValidator {
 
         ValidatorUltils.throwOnError(validationErrors);
     }
+
+    public void validate(Long allocationId, UpdateAllocationRequest updateAllocationRequest) {
+        ValidationErros validationErrors = new ValidationErros();
+
+        validateRequired(allocationId, ALLOCATION_ID,validationErrors);
+        validateSubject(updateAllocationRequest.getSubject(), validationErrors);
+        validateDates(updateAllocationRequest.getStartAt(),updateAllocationRequest.getEndAt(),validationErrors);
+
+    }
+
 
     private void validateSubject(String subject, ValidationErros validationErrors) {
         validateRequired(subject, ALLOCATION_SUBJECT, validationErrors);
