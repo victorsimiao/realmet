@@ -1,6 +1,7 @@
 package br.com.victor.realmeet.unit;
 
 import br.com.victor.realmeet.core.BaseUnitTest;
+import br.com.victor.realmeet.domain.repository.AllocationRepository;
 import br.com.victor.realmeet.dto.request.AllocationRequest;
 import br.com.victor.realmeet.exception.InvalidRequestException;
 import br.com.victor.realmeet.util.DateUtils;
@@ -9,6 +10,7 @@ import br.com.victor.realmeet.validator.ValidationError;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 
 import static br.com.victor.realmeet.utils.TestDataCreator.newAllocationRequestBuilder;
 import static br.com.victor.realmeet.validator.ValidatorConstants.*;
@@ -19,9 +21,12 @@ public class AllocationValidatorUnitTest extends BaseUnitTest {
 
     private AllocationValidator allocationValidator;
 
+    @Mock
+    private AllocationRepository allocationRepository;
+
     @BeforeEach
     void setupEach() {
-        allocationValidator = new AllocationValidator();
+        allocationValidator = new AllocationValidator(allocationRepository);
     }
 
     @Test

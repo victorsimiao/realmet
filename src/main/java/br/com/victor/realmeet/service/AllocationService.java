@@ -15,6 +15,7 @@ import br.com.victor.realmeet.mapper.AllocationMapper;
 import br.com.victor.realmeet.util.PageUtils;
 import br.com.victor.realmeet.validator.AllocationValidator;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -72,7 +73,7 @@ public class AllocationService {
             throw new AllocationCannotBeUpdateException();
         }
 
-        allocationValidator.validate(id, updateAllocationRequest);
+        allocationValidator.validate(id, allocation.getRoom().getId(), updateAllocationRequest);
 
         allocationRepository.updateAllocation(
                 id,
@@ -83,9 +84,9 @@ public class AllocationService {
     }
 
     public List<AllocationResponse> listAllocations(String employeeEmail, Long roomId, LocalDate startAt, LocalDate endAt, String orderBy, Integer limit, Integer page) {
-        Pageable pageable = PageUtils.newPageable(page,limit,ALLOCATION_MAX_FILTER_LIMIT,orderBy,SORTABLE_FIELDS);
+        Pageable pageable = PageUtils.newPageable(page, limit, ALLOCATION_MAX_FILTER_LIMIT, orderBy, SORTABLE_FIELDS);
 
-        List<Allocation> allocationList = allocationRepository.findAllWithfilters(
+        Page<Allocation> allocationList = allocationRepository.findAllWithfilters(
                 employeeEmail,
                 roomId,
                 isNull(startAt) ? null : startAt.atTime(LocalTime.MIN).atOffset(DEFAULT_TIMEZONE),
@@ -93,7 +94,7 @@ public class AllocationService {
                 pageable
         );
 
-       return allocationList.stream().map(allocation -> allocationMapper.fromEntityToDto(allocation)).collect(Collectors.toList());
+        return allocationList.stream().map(allocation -> allocationMapper.fromEntityToDto(allocation)).collect(Collectors.toList());
     }
 
     private boolean isAllocationInThePast(Allocation allocation) {
