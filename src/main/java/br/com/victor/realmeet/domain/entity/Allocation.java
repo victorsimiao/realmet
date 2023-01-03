@@ -5,10 +5,12 @@ import br.com.victor.realmeet.util.DateUtils;
 
 import javax.persistence.*;
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
 public class Allocation {
+    public static final List<String> SORTABLE_FIELDS= List.of("startAt","endAt");
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

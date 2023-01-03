@@ -12,11 +12,23 @@ import br.com.victor.realmeet.exception.AllocationCannotBeUpdateException;
 import br.com.victor.realmeet.exception.AllocationNotFoundException;
 import br.com.victor.realmeet.exception.RoomNotFoundException;
 import br.com.victor.realmeet.mapper.AllocationMapper;
+import br.com.victor.realmeet.util.PageUtils;
 import br.com.victor.realmeet.validator.AllocationValidator;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static br.com.victor.realmeet.domain.entity.Allocation.SORTABLE_FIELDS;
+import static br.com.victor.realmeet.util.Constants.ALLOCATION_MAX_FILTER_LIMIT;
+import static br.com.victor.realmeet.util.DateUtils.DEFAULT_TIMEZONE;
 import static br.com.victor.realmeet.util.DateUtils.now;
+import static java.util.Objects.isNull;
 
 @Service
 public class AllocationService {
@@ -60,7 +72,7 @@ public class AllocationService {
             throw new AllocationCannotBeUpdateException();
         }
 
-        allocationValidator.validate(id,updateAllocationRequest);
+        allocationValidator.validate(id, updateAllocationRequest);
 
         allocationRepository.updateAllocation(
                 id,
@@ -70,9 +82,24 @@ public class AllocationService {
         );
     }
 
+    public List<AllocationResponse> listAllocations(String employeeEmail, Long roomId, LocalDate startAt, LocalDate endAt, String orderBy, Integer limit, Integer page) {
+        Pageable pageable = PageUtils.newPageable(page,limit,ALLOCATION_MAX_FILTER_LIMIT,orderBy,SORTABLE_FIELDS);
+
+        List<Allocation> allocationList = allocationRepository.findAllWithfilters(
+                employeeEmail,
+                roomId,
+                isNull(startAt) ? null : startAt.atTime(LocalTime.MIN).atOffset(DEFAULT_TIMEZONE),
+                isNull(endAt) ? null : endAt.atTime(LocalTime.MAX).atOffset(DEFAULT_TIMEZONE),
+                pageable
+        );
+
+       return allocationList.stream().map(allocation -> allocationMapper.fromEntityToDto(allocation)).collect(Collectors.toList());
+    }
+
     private boolean isAllocationInThePast(Allocation allocation) {
         return allocation.getStartAt().isBefore(now());
     }
+
     private Allocation getAllocationOrThrow(Long id) {
         return allocationRepository.findById(id).orElseThrow(() -> new AllocationNotFoundException("Allocation not found: " + id));
     }
