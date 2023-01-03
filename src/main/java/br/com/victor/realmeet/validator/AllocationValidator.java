@@ -5,8 +5,6 @@ import br.com.victor.realmeet.domain.repository.AllocationRepository;
 import br.com.victor.realmeet.dto.request.AllocationRequest;
 import br.com.victor.realmeet.dto.request.UpdateAllocationRequest;
 import br.com.victor.realmeet.util.DateUtils;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
@@ -69,6 +67,7 @@ public class AllocationValidator {
             validateDateOrdering(startAt, endAt, validationErrors);
             validateDateInTheFuture(startAt, validationErrors);
             validateDuration(startAt, endAt, validationErrors);
+            validateIfTimeAvailable(roomId,startAt,endAt,validationErrors);
         }
     }
 

@@ -10,12 +10,22 @@ import br.com.victor.realmeet.validator.ValidationError;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatcher;
+import org.mockito.ArgumentMatchers;
+import org.mockito.BDDMockito;
 import org.mockito.Mock;
 
-import static br.com.victor.realmeet.utils.TestDataCreator.newAllocationRequestBuilder;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.OffsetDateTime;
+import java.util.List;
+
+import static br.com.victor.realmeet.util.DateUtils.DEFAULT_TIMEZONE;
+import static br.com.victor.realmeet.utils.TestDataCreator.*;
 import static br.com.victor.realmeet.validator.ValidatorConstants.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.BDDMockito.given;
 
 public class AllocationValidatorUnitTest extends BaseUnitTest {
 
@@ -164,7 +174,7 @@ public class AllocationValidatorUnitTest extends BaseUnitTest {
 
     @Test
     void testValidateWhenDateIntervalExceedsMaxDuration() {
-        AllocationRequest allocationRequest = newAllocationRequestBuilder().startAt(DateUtils.now().plusDays(1)).endAt(DateUtils.now().plusDays(1).plusSeconds(ALLOCATION_MAX_DURATION_SECONDS+1)).build();
+        AllocationRequest allocationRequest = newAllocationRequestBuilder().startAt(DateUtils.now().plusDays(1)).endAt(DateUtils.now().plusDays(1).plusSeconds(ALLOCATION_MAX_DURATION_SECONDS + 1)).build();
 
         InvalidRequestException invalidRequestException = assertThrows(InvalidRequestException.class, () -> allocationValidator.validate(allocationRequest));
 
@@ -174,6 +184,46 @@ public class AllocationValidatorUnitTest extends BaseUnitTest {
                 invalidRequestException.getValidationErrors().getErro(0)
         );
 
+    }
+
+    @Test
+    void testValidateDateIntervals() {
+        assertTrue(isScheduleAllowed(tomorrowAt(4), tomorrowAt(5), tomorrowAt(1), tomorrowAt(2)));
+        assertTrue(isScheduleAllowed(tomorrowAt(4), tomorrowAt(5), tomorrowAt(6), tomorrowAt(7)));
+        assertTrue(isScheduleAllowed(tomorrowAt(4), tomorrowAt(5), tomorrowAt(3), tomorrowAt(4)));
+        assertTrue(isScheduleAllowed(tomorrowAt(4), tomorrowAt(5), tomorrowAt(5), tomorrowAt(6)));
+        assertFalse(isScheduleAllowed(tomorrowAt(4), tomorrowAt(7), tomorrowAt(4), tomorrowAt(5)));
+        assertFalse(isScheduleAllowed(tomorrowAt(4), tomorrowAt(7), tomorrowAt(6), tomorrowAt(7)));
+        assertFalse(isScheduleAllowed(tomorrowAt(4), tomorrowAt(7), tomorrowAt(3), tomorrowAt(5)));
+        assertFalse(isScheduleAllowed(tomorrowAt(4), tomorrowAt(7), tomorrowAt(6), tomorrowAt(8)));
+    }
+
+    private OffsetDateTime tomorrowAt(int hour) {
+        return OffsetDateTime.of(LocalDate.now().plusDays(1), LocalTime.of(hour, 0), DEFAULT_TIMEZONE);
+    }
+
+    private boolean isScheduleAllowed(
+            OffsetDateTime scheduledAllocationStart,
+            OffsetDateTime scheduledAllocationEnd,
+            OffsetDateTime newAllocationStart,
+            OffsetDateTime newAllocationEnd
+    ) {
+        given(allocationRepository.findAllWithfilters(any(), any(), any(), any()))
+                .willReturn(
+                        List.of(
+                                newAllocationBuilder(newRoomBuilder().build())
+                                        .startAt(scheduledAllocationStart)
+                                        .endAt(scheduledAllocationEnd)
+                                        .build()
+                        )
+                );
+
+        try {
+            allocationValidator.validate(newAllocationRequestBuilder().startAt(newAllocationStart).endAt(newAllocationEnd).build());
+            return true;
+        } catch (InvalidRequestException e) {
+            return false;
+        }
     }
 
 }
