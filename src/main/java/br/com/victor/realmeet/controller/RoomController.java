@@ -21,7 +21,7 @@ public class RoomController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<RoomResponse> getRoom(@PathVariable(value = "id") Long id) {
+    public ResponseEntity<RoomResponse> getRoom(@PathVariable(value = "id") Long id, @RequestHeader(value = "api-key", required = true)String apiKey) {
         return ResponseEntity.ok(roomService.getRoom(id));
     }
 
