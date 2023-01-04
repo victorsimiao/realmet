@@ -53,7 +53,7 @@ public class AllocationServiceUnitTest extends BaseUnitTest {
     @Test
     void shouldNotDeleteAllocationInThePast() {
         Room room = TestDataCreator.newRoomBuilder().build();
-        Allocation allocation = TestDataCreator.newAllocationBuilder(room).startAt(DateUtils.now().plusHours(1)).endAt(DateUtils.now().minusMinutes(10)).build();
+        Allocation allocation = TestDataCreator.newAllocationBuilder(room).startAt(DateUtils.now().minusHours(1)).endAt(DateUtils.now().minusMinutes(10)).build();
         Mockito.when(allocationRepository.findById(allocation.getId())).thenReturn(Optional.of(allocation));
 
         assertThrows(AllocationCannotBeDeletedException.class, () -> allocationService.deleteAllocation(allocation.getId()));

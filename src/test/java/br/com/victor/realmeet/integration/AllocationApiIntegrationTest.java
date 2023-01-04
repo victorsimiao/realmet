@@ -36,10 +36,12 @@ public class AllocationApiIntegrationTest extends BaseIntegrationTest {
     void testCreateAllocationSuccess() throws Exception {
         Room room = roomRepository.saveAndFlush(newRoomBuilder().build());
         AllocationRequest allocationRequest = newAllocationRequestBuilder().roomId(room.getId()).build();
+        mockApiKey();
         String payload = toJson(allocationRequest);
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post("/allocations")
-                .header(HttpHeaders.ACCEPT_LANGUAGE, "pt-br")
+                .header("api-key", TEST_CLIENT_API_KEY)
+                .header("Accept-Language", "pt-br")
                 .contentType(APPLICATION_JSON)
                 .content(payload);
 

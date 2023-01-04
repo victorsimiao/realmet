@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import static br.com.victor.realmeet.utils.TestConstants.TEST_CLIENT_API_KEY;
 import static br.com.victor.realmeet.utils.TestDataCreator.newRoomBuilder;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -26,11 +27,13 @@ public class RoomApiIntegrationTest extends BaseIntegrationTest {
     void shouldFindRoomByIdWithSuccess() throws Exception {
         Room room = newRoomBuilder().build();
         roomRepository.saveAndFlush(room);
-
+        mockApiKey();
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get("/rooms/" + room.getId())
                 .contentType(MediaType.APPLICATION_JSON)
+                .header("api-key", TEST_CLIENT_API_KEY)
                 .header("Accept-Language", "pt-br");
+
 
         mockMvc.perform(request)
                 .andExpect(status().isOk())
@@ -50,9 +53,11 @@ public class RoomApiIntegrationTest extends BaseIntegrationTest {
     void testGetRoomInactive() throws Exception {
         Room room = TestDataCreator.newRoomBuilder().active(false).build();
         roomRepository.saveAndFlush(room);
+        mockApiKey();
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get("/rooms/" + room.getId())
                 .contentType(MediaType.APPLICATION_JSON)
+                .header("api-key", TEST_CLIENT_API_KEY)
                 .header("Accept-Language", "pt-br");
 
         mockMvc.perform(request)
@@ -60,7 +65,7 @@ public class RoomApiIntegrationTest extends BaseIntegrationTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.code").value("404"))
                 .andExpect(jsonPath("$.status").value("Not Found"))
-                .andExpect(jsonPath("$.message").value("Room not found: "+room.getId()));
+                .andExpect(jsonPath("$.message").value("Room not found: " + room.getId()));
 
     }
 
@@ -68,9 +73,11 @@ public class RoomApiIntegrationTest extends BaseIntegrationTest {
     void testDeleteRoomSuccess() throws Exception {
         Room room = TestDataCreator.newRoomBuilder().build();
         Long roomId = roomRepository.saveAndFlush(room).getId();
+        mockApiKey();
 
-        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.delete ("/rooms/" + room.getId())
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.delete("/rooms/" + room.getId())
                 .contentType(MediaType.APPLICATION_JSON)
+                .header("api-key", TEST_CLIENT_API_KEY)
                 .header("Accept-Language", "pt-br");
 
         mockMvc.perform(request)
@@ -80,10 +87,12 @@ public class RoomApiIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    void testDeleteRoomDoesNotExist() throws Exception{
-        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.delete ("/rooms/" + 1)
+    void testDeleteRoomDoesNotExist() throws Exception {
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.delete("/rooms/" + 1)
                 .contentType(MediaType.APPLICATION_JSON)
+                .header("api-key", TEST_CLIENT_API_KEY)
                 .header("Accept-Language", "pt-br");
+        mockApiKey();
 
         mockMvc.perform(request)
                 .andExpect(status().isNotFound());
