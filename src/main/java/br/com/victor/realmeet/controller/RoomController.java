@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Tag(name = "/rooms", description = "Recursos para manipulação de salas")
 @RestController
@@ -39,6 +40,7 @@ public class RoomController {
     public ResponseEntity<RoomResponse> getRoom(@PathVariable(value = "id") Long id, @RequestHeader(value = "api-key", required = true) String apiKey) {
         return ResponseEntity.ok(roomService.getRoom(id));
     }
+
     @Operation(description = "Recurso para criar uma sala")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Recurso criado com sucesso"),
@@ -74,5 +76,24 @@ public class RoomController {
     public ResponseEntity<Void> updateRoom(@PathVariable(value = "id") Long id, @Valid @RequestBody UpdateRoomRequest updateRoomRequest, @RequestHeader(value = "api-key", required = true) String apiKey) {
         roomService.updateRoom(id, updateRoomRequest);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @Operation(description = "Recurso para listar salas")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Retorno OK"),
+            @ApiResponse(responseCode = "403", description = "Erro de autenticação"),
+            @ApiResponse(responseCode = "422", description = "Dados inválidos fornecidos")
+    })
+    @GetMapping
+    public ResponseEntity<List<RoomResponse>> listRooms(
+            @RequestHeader(value = "api-key", required = true) String apiKey,
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) Boolean active,
+            @RequestParam(required = false) String orderBy,
+            @RequestParam(required = false) Integer limit,
+            @RequestParam(required = false) Integer page) {
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(roomService.listRooms(name, active, orderBy, limit, page));
     }
 }

@@ -1,12 +1,14 @@
 package br.com.victor.realmeet.domain.entity;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
 import static java.util.Objects.*;
 
 @Entity
 public class Room {
+    public static final List<String> SORTABLE_FIELDS = List.of("name","seats");
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
