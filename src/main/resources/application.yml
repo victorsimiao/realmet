@@ -16,3 +16,10 @@ spring:
     username: root
     password: root
     type: com.zaxxer.hikari.HikariDataSource
+
+# =============================
+# = swagger
+# =============================
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
