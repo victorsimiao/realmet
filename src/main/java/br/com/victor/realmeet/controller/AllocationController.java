@@ -16,7 +16,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
-@Tag(name = "/allocations", description = "Recursos para manipulação de alocações")
+
+@Tag(name = "allocations", description = "Endpoints para gerenciamento de agendamentos")
 @RestController
 @RequestMapping("/allocations")
 public class AllocationController {
@@ -27,9 +28,9 @@ public class AllocationController {
         this.allocationService = allocationService;
     }
 
-    @Operation(description = "Recurso para criar uma alocação")
+    @Operation(summary = "Realizar agendamento", description = "Recurso para criar um agendamento")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Alocação criada com sucesso"),
+            @ApiResponse(responseCode = "201", description = "Agendamento criado com sucesso"),
             @ApiResponse(responseCode = "404", description = "Recurso não encontrado"),
             @ApiResponse(responseCode = "403", description = "Erro de autenticação"),
             @ApiResponse(responseCode = "422", description = "Dados inválidos fornecidos")
@@ -39,9 +40,9 @@ public class AllocationController {
         return ResponseEntity.status(HttpStatus.CREATED).body(allocationService.createAllocation(allocationRequest));
     }
 
-    @Operation(description = "Recurso para deletar uma alocação pelo seu identificador")
+    @Operation(summary = "Deletar agendamento", description = "Recurso para deletar um agendamento pelo seu identificador")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "Alocação deletada com sucesso"),
+            @ApiResponse(responseCode = "204", description = "Agendamento deletado com sucesso"),
             @ApiResponse(responseCode = "404", description = "Recurso não encontrado"),
             @ApiResponse(responseCode = "403", description = "Erro de autenticação"),
             @ApiResponse(responseCode = "422", description = "Dados inválidos fornecidos")
@@ -52,9 +53,9 @@ public class AllocationController {
         return ResponseEntity.noContent().build();
     }
 
-    @Operation(description = "Recurso para atualizar uma alocação pelo seu identificador")
+    @Operation(summary = "Atualizar agendamento ", description = "Recurso para atualizar um agendamento pelo seu identificador")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "Alocação atualizada com sucesso"),
+            @ApiResponse(responseCode = "204", description = "Agendamento atualizado com sucesso"),
             @ApiResponse(responseCode = "404", description = "Recurso não encontrado"),
             @ApiResponse(responseCode = "403", description = "Erro de autenticação"),
             @ApiResponse(responseCode = "422", description = "Dados inválidos fornecidos")
@@ -65,7 +66,7 @@ public class AllocationController {
         return ResponseEntity.noContent().build();
     }
 
-    @Operation(description = "Recurso para listar as alocações ")
+    @Operation(summary = "Listar agendamentos", description = "Recurso para listar os agendamentos ")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Retorno OK"),
             @ApiResponse(responseCode = "404", description = "Recurso não encontrado"),
@@ -84,6 +85,6 @@ public class AllocationController {
             @RequestParam(required = false) Integer page) {
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(allocationService.listAllocations(employeeEmail, roomId, startAt, endAt,orderBy,limit,page));
+                .body(allocationService.listAllocations(employeeEmail, roomId, startAt, endAt, orderBy, limit, page));
     }
 }

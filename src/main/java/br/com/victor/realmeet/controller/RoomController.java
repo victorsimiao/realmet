@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-@Tag(name = "/rooms", description = "Recursos para manipulação de salas")
+@Tag(name = "rooms", description = "Endpoints para gerenciamento de salas")
 @RestController
 @RequestMapping("/rooms")
 public class RoomController {
@@ -29,7 +29,7 @@ public class RoomController {
         this.roomService = roomService;
     }
 
-    @Operation(description = "Recurso para buscar uma sala pelo seu identificador")
+    @Operation(summary = "Buscar sala",description = "Recurso para buscar uma sala pelo seu identificador")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Retorno OK com a busca da sala"),
             @ApiResponse(responseCode = "404", description = "Recurso não encontrado"),
@@ -41,7 +41,7 @@ public class RoomController {
         return ResponseEntity.ok(roomService.getRoom(id));
     }
 
-    @Operation(description = "Recurso para criar uma sala")
+    @Operation(summary = "Criar sala",description = "Recurso para criar uma sala")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Recurso criado com sucesso"),
             @ApiResponse(responseCode = "403", description = "Erro de autenticação"),
@@ -52,7 +52,7 @@ public class RoomController {
         return ResponseEntity.status(HttpStatus.CREATED).body(roomService.createRoom(roomRequest));
     }
 
-    @Operation(description = "Recurso para deletar uma sala")
+    @Operation(summary = "Deletar sala",description = "Recurso para deletar uma sala")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Sala deletada com sucesso"),
             @ApiResponse(responseCode = "404", description = "Recurso não encontrado"),
@@ -65,7 +65,7 @@ public class RoomController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @Operation(description = "Recurso para atualizar uma sala")
+    @Operation(summary = "Atualizar sala",description = "Recurso para atualizar uma sala")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Sala atualizada com sucesso"),
             @ApiResponse(responseCode = "404", description = "Recurso não encontrado"),
@@ -78,7 +78,7 @@ public class RoomController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @Operation(description = "Recurso para listar salas")
+    @Operation(summary = "Listar salas ",description = "Recurso para listar salas")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Retorno OK"),
             @ApiResponse(responseCode = "403", description = "Erro de autenticação"),
