@@ -1,0 +1,37 @@
+version: '3'
+services:
+  mysql-docker-container:
+    container_name: mysql-docker-container
+    image: mysql:8.0
+    environment:
+        - MYSQL_ROOT_PASSWORD=root
+        - MYSQL_DATABASE=realmeet
+        - MYSQL_PASSWORD=root
+    ports:
+      - 3306:3306
+    expose:
+      - 3306
+    volumes:
+        - /data/mysql
+    networks:
+      - app-network
+
+  api-meeting-room:
+    container_name: meeting-room-container
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    depends_on:
+      - mysql-docker-container
+    networks:
+      - app-network
+    ports:
+      - 8080:8080
+    expose:
+      - 8080
+    restart: on-failure
+
+networks:
+  app-network:
+    driver:
+      bridge
