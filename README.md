@@ -63,4 +63,4 @@ $ http://localhost:8080/v1/swagger-ui/index.html
 ![swagger](imagens/swagger.png "swagger")
 
 ### 🟠 Desenvolvedor
-[Victor simião](https://www.linkedin.com/in/victorsreis/) 🚀
+[Victor Simião](https://www.linkedin.com/in/victorsreis/) 🚀
