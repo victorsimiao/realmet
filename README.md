@@ -25,7 +25,7 @@ Esse é um projeto de Back-end, cujo o principal objetivo é realizar reserva e 
 
 ### 🟠 Principais tecnologias/ferramentas utilizadas
 ![tecnologias](imagens/tec.png "tecnologias")
-- Java 17
+- Java 11
 - Spring Boot
 - Spring Data
 - Maven
@@ -40,7 +40,7 @@ Esse é um projeto de Back-end, cujo o principal objetivo é realizar reserva e 
 
 ### 🟠 Pré-requisitos
 
-- JDK 17
+- JDK 11
 - Maven 3.x.x
 - Docker e Docker Compose
 ### 🟠 Rodando o projeto

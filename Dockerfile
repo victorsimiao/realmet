@@ -3,7 +3,7 @@ WORKDIR /build
 COPY . .
 RUN mvn clean package -DskipTests
 
-FROM openjdk:17
+FROM openjdk:11
 WORKDIR /app
 COPY --from=build ./build/target/*.jar ./realmeet.jar
 ENTRYPOINT java -jar realmeet.jar
