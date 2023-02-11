@@ -1,7 +1,6 @@
 version: '3'
 services:
-  mysql-docker-container:
-    container_name: mysql-docker-container
+  mysql-db:
     image: mysql:8.0
     environment:
         - MYSQL_ROOT_PASSWORD=root
@@ -17,12 +16,13 @@ services:
       - app-network
 
   api-meeting-room:
-    container_name: meeting-room-container
     build:
       context: .
       dockerfile: ./Dockerfile
+    environment:
+      DB_HOST: mysql-db
     depends_on:
-      - mysql-docker-container
+      - mysql-db
     networks:
       - app-network
     ports:

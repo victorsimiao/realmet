@@ -14,7 +14,6 @@ import br.com.victor.realmeet.exception.RoomNotFoundException;
 import br.com.victor.realmeet.mapper.AllocationMapper;
 import br.com.victor.realmeet.util.PageUtils;
 import br.com.victor.realmeet.validator.AllocationValidator;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
