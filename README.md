@@ -1,15 +1,7 @@
 # Realmeet
 ![room](imagens/room.png "room")
-<div align="center">
 
-![](https://img.shields.io/badge/Status-Em%20Desenvolvimento-orange)
-
-</div>
-<div align="center">
-
-Realmeet é uma API REST para reservas e gerenciamento de salas de reunião.
-
-</div> 
+### Realmeet é uma API REST para reservas e gerenciamento de salas de reunião.
 
 ### 🟠 Objetivo do Projeto
 
@@ -27,6 +19,7 @@ Esse é um projeto de Back-end, cujo o principal objetivo é realizar reserva e 
 ![tecnologias](imagens/tec.png "tecnologias")
 - Java 11
 - Spring Boot
+- Spring MVC
 - Spring Data
 - Maven
 - Swagger | OpenApi
@@ -36,7 +29,7 @@ Esse é um projeto de Back-end, cujo o principal objetivo é realizar reserva e 
 - Flywaydb
 - Docker
 - MySQL
-- Intellij
+
 
 ### 🟠 Pré-requisitos
 
@@ -50,7 +43,14 @@ $ git clone https://github.com/victorsimiao/realmet.git
 
 # Utilizando Docker
 $  docker-compose up -d
+
 # O servidor iniciará na porta:8080
+
+#  Autenticando os endpoints com API key
+Para ultilizar os recursos dessa API, é preciso adicionar o seguinte no Header da Request: 
+
+$ api-key : key-customer
+
 ```
 ### 🟠 Rodando os testes
 ```bash
