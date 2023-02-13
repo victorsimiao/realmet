@@ -97,7 +97,7 @@ public class AllocationService {
     }
 
     private boolean isAllocationInThePast(Allocation allocation) {
-        return allocation.getStartAt().isBefore(now());
+        return allocation.getEndAt().isBefore(now());
     }
 
     private Allocation getAllocationOrThrow(Long id) {

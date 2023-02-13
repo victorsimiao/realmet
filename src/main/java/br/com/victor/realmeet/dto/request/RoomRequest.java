@@ -1,9 +1,14 @@
 package br.com.victor.realmeet.dto.request;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 public class RoomRequest {
 
+    @NotBlank
     private String name;
 
+    @NotNull
     private Integer seats;
 
     public RoomRequest(String name, Integer seats) {

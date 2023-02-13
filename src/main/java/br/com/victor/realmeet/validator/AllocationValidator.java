@@ -43,6 +43,7 @@ public class AllocationValidator {
         validateSubject(updateAllocationRequest.getSubject(), validationErrors);
         validateDates(roomId, updateAllocationRequest.getStartAt(), updateAllocationRequest.getEndAt(), validationErrors);
 
+        ValidatorUltils.throwOnError(validationErrors);
     }
 
 

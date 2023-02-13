@@ -36,7 +36,7 @@ public class AllocationController {
             @ApiResponse(responseCode = "422", description = "Dados inválidos fornecidos")
     })
     @PostMapping
-    public ResponseEntity<AllocationResponse> createAllocation(@RequestBody AllocationRequest allocationRequest, @RequestHeader(value = "api-key", required = true) String apiKey) {
+    public ResponseEntity<AllocationResponse> createAllocation(@RequestBody @Valid AllocationRequest allocationRequest, @RequestHeader(value = "api-key", required = true) String apiKey) {
         return ResponseEntity.status(HttpStatus.CREATED).body(allocationService.createAllocation(allocationRequest));
     }
 
@@ -61,7 +61,8 @@ public class AllocationController {
             @ApiResponse(responseCode = "422", description = "Dados inválidos fornecidos")
     })
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateAllocatiojn(@Param("id") Long id, @RequestBody @Valid UpdateAllocationRequest updateAllocationRequest, @RequestHeader(value = "api-key", required = true) String apiKey) {
+    public ResponseEntity<Void> updateAllocatiojn(@PathVariable("id") Long id, @RequestBody @Valid UpdateAllocationRequest updateAllocationRequest,
+                                                  @RequestHeader(value = "api-key", required = true) String apiKey) {
         allocationService.updateallocation(id, updateAllocationRequest);
         return ResponseEntity.noContent().build();
     }

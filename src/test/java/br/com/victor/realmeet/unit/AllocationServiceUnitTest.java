@@ -76,7 +76,7 @@ public class AllocationServiceUnitTest extends BaseUnitTest {
     @Test
     void shouldNotUpdateAllocationInThePast() {
         Room room = TestDataCreator.newRoomBuilder().build();
-        Allocation allocation = TestDataCreator.newAllocationBuilder(room).startAt(DateUtils.now().minusMinutes(5)).build();
+        Allocation allocation = TestDataCreator.newAllocationBuilder(room).endAt(DateUtils.now().minusMinutes(5)).build();
         UpdateAllocationRequest updateAllocationRequest = TestDataCreator.newUpdateAllocationBuilder().build();
         Mockito.when(allocationRepository.findById(allocation.getId())).thenReturn(Optional.of(allocation));
 

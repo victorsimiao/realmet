@@ -1,9 +1,13 @@
 package br.com.victor.realmeet.dto.request;
 
-public class UpdateRoomRequest {
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
+public class UpdateRoomRequest {
+    @NotBlank
     private String name;
 
+    @NotNull
     private Integer seats;
 
     public UpdateRoomRequest(String name, Integer seats) {
